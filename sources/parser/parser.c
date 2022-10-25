@@ -1,30 +1,73 @@
-#include "../../minirtMAIN.h"
+#include "../../inc/minirtMAIN.h"
 
-t_scene *parse(int fd)
+static void	parse_line(t_base *base, t_figures **figs, char **strptr)
 {
-    t_scene *scene;
+    char	*str;
 
-
-    return (scene);
+    str = *strptr;
+    if (*str == 'R' && *(str++))
+        parse_resol(base, &str);
+    else if (*str == 'A' && *(str++))
+        parse_amb_light(base, &str);
+    else if (*str == 'C' && *(str++))
+        parse_cam(base, &str);
+    else if (*str == 'L' && *(str++))
+        parse_light(base, &str);
+    else if (*str == 'c' && *(str + 1) == 'y' && *(str++) && *(str)++)
+        parse_cylinder(figs, &str, base->scene);
+    else if (*str == 's' && *(str + 1) == 'p' && *(str++) && *(str)++)
+        parse_sphere(figs, &str, base->scene);
+    else if (*str == 'p' && *(str + 1) == 'l' && *(str++) && *(str)++)
+        parse_plane(figs, &str, base->scene);
+    *strptr = str;
 }
 
-t_scene *fd_openning(const int argc, char **argv)
+static void	parse_element(t_base *base, t_figures **figs, char *line)
 {
-    t_scene *scene;
-    int     fd;
+    if (*line)
+        parse_line(base, figs, &line);
+}
 
-    //handle individual cases
-    if (argc < 2)
-        print_error("Expecting file with a .rt extension", 1);
-    if (argc > 2)
-        print_error("Too many arg", 1);
-    if (argc == 2 && ft_strncmp_reverse(argv[1], ".rt", 3))
-        print_error("First arg must be with a .rt extension", 1);
-    if ((fd = open(argv[1], O_RDONLY)) == -1) // only read
-        print_error(strerror(errno), errno);
-    if (!(scene = parse(fd)))
-        print_error("Parse error", 1);
-    if (close(fd) == -1)
-        print_error(strerror(errno), errno);
-    return (scene);
+static void	read_file(t_base *base, t_figures **figs, int fd)
+{
+    char		*line;
+    int			read_status;
+
+    *figs = base->scene->figs;
+    read_status = -1;
+    read_status = get_next_line(fd, &line);
+    if (read_status == -1)
+        arg_error("Can't open");
+    while (read_status > 0)
+    {
+        parse_element(base, figs, line);
+        free(line);
+        line = NULL;
+        read_status = get_next_line(fd, &line);
+    }
+    if (line)
+    {
+        parse_element(base, figs, line);
+        free(line);
+        line = NULL;
+    }
+    base->scene->figs = *figs;
+}
+
+int	parse(int argc, char **argv, t_base *base)
+{
+    int			fd;
+    int			read_status;
+    t_figures	*figs;
+
+    figs = base->scene->figs;
+    read_status = -1;
+    if (argc != 2)
+        arg_error("Usage ./miniRt *filename*.rt");
+    fd = open(argv[1], O_RDONLY);
+    if (fd <= 0)
+        arg_error("Can't open file");
+    read_file(base, &figs, fd);
+    close(fd);
+    return (1);
 }
