@@ -43,7 +43,7 @@ static void	read_file(t_base *base, t_figures **figs, int fd)
         parse_element(base, figs, line);
         free(line);
         line = NULL;
-        read_status = get_next_line(fd, &line);
+        read_status = get_next_line(fd, &line); //reading
     }
     if (line)
     {
@@ -63,7 +63,7 @@ int	parse(int argc, char **argv, t_base *base)
     figs = base->scene->figs;
     read_status = -1;
     if (argc != 2)
-        arg_error("Usage ./miniRt *filename*.rt");
+        arg_error("Usage ./miniRt *filename*.rt"); //handling
     fd = open(argv[1], O_RDONLY);
     if (fd <= 0)
         arg_error("Can't open file");
