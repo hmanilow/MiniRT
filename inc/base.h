@@ -3,6 +3,8 @@
 
 #include "minirtMAIN.h"
 
+//todo vector struct
+
 //координаты и цвета
 
 typedef struct s_color
