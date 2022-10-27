@@ -20,3 +20,5 @@ void	skip_space(char **s)
     while (**s == 32 || **s == 9)
         (*s)++;
 }
+
+//for parsing
