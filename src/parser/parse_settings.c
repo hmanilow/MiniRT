@@ -36,3 +36,5 @@ void	parse_cam(t_base *base, char **str)
     base->scene->camera->deg = str_to_int(str);
     check_range(base->scene->camera->deg, 0.0, 180.0, "CAMERA");
 }
+
+//parsing param
