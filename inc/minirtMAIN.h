@@ -41,6 +41,8 @@ void		parse_cam(t_base *base, char **str);
 int	str_to_int(char **s);
 void	skip_space(char **s);
 
+//rendering
+
 // error handling
 void	arg_error(char *sms);
 
