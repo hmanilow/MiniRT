@@ -65,6 +65,8 @@ static int	ft_init_vars(char **buffer, char **remainder, int *read_bytes)
     return (1);
 }
 
+//rewrote
+
 int	get_next_line(int fd, char **line)
 {
     static char	*remainder;
