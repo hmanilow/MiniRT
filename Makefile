@@ -146,6 +146,8 @@ norm:
 
 leaks:
 	leaks --atExit -- ./$(NAME)
+	
+##todo check licks
 
 .PHONY: all bonus mlx libkd gnl clean \
 mlx_clean libkd_clean gnl_clean clean_all \
