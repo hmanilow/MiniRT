@@ -28,3 +28,5 @@ fclean: clean
 	${RM} ${NAME}
 
 re: fclean all
+
+##todo .o
